@@ -35,7 +35,7 @@ function mainMenu() {
             addRole()
         } else if (direction === "add new employee") {
             addEmployee()
-        }else if(direction === "update employee"){
+        }else if(direction === "Update an Employee"){
             updateEmployee()
         }
 
