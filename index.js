@@ -13,7 +13,8 @@ function mainMenu() {
             "view company",
             "add department",
             "add new role",
-            "add new employee"
+            "add new employee",
+            "Update an Employee",
 
         ]
     }).then(({ direction }) => {
@@ -34,7 +35,10 @@ function mainMenu() {
             addRole()
         } else if (direction === "add new employee") {
             addEmployee()
+        }else if(direction === "update employee"){
+            updateEmployee()
         }
+
     })
 }
 function viewDepartments() {
@@ -147,7 +151,7 @@ async function addEmployee() {
     const [managers] = await db.promise().query("SELECT * FROM employee")
     const managersArray = managers.map(manager => (
         {
-            name: manager.first_name+" "+manager.last_name,
+            name: manager.first_name + " " + manager.last_name,
             value: manager.manager_id
         }
     ))
@@ -165,7 +169,7 @@ async function addEmployee() {
         name: "id",
         message: "Please select the employee's role",
         choices: roleArray
-    },{
+    }, {
         type: "list",
         name: "manager_id",
         message: "Please select the manager",
@@ -176,7 +180,7 @@ async function addEmployee() {
             first_name: answer.first,
             last_name: answer.last,
             role_id: answer.id,
-            manager_id:answer.manager_id
+            manager_id: answer.manager_id
 
         }
         db.promise().query("INSERT INTO employee SET ?", employeeObj).then(([response]) => {
@@ -189,14 +193,49 @@ async function addEmployee() {
         })
     })
 }
-async function updateEmployee(){
-    const [employees] = await db.promise().query("SELECT * FROM employee")
-    const roleArray = roles.map(role => (
-        {
-            name: role.title,
-            value: role.id
+function updateEmployee() {
+    inquirer.prompt([{
+        name: 'employee_id',
+        type: 'input',
+        message: 'What is the employee ID of the new employee',
+        validate: updateEmployeeInput => {
+            if (updateEmployeeInput) {
+                return true;
+            } else {
+                console.log("Invalid Employee ID");
+                return false;
+            }
         }
-    ))
+
+
+    },
+    {
+        name: 'role_id',
+        type: 'input',
+        message: 'Please update the role id of the new employee',
+        validate: (updateRoleIdInput) => {
+          if (updateRoleIdInput) {
+            return true;
+          } else {
+            console.log("Invalid please provide an updated role id!");
+            return false;
+          }
+    } 
+}
+    ])
+    .then((answers) => {
+        console.log(answers);
+        const database = "UPDATE employee SET role_id = ? WHERE employee_id = ?";
+        const parameters = [answers.role_id, answers.employee_id];
+  
+          db.query(database, parameters, function (err, results) {
+            if (err) throw err;
+            console.log(results);
+            mainMenu();
+
+          });
+
+});
 }
 
 mainMenu()
