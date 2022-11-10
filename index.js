@@ -234,13 +234,13 @@ async function updateEmployee() {
     },
 
     ]).then(answer => {
-        var updateObj = {
-            first_name: answer.first,
-            last_name: answer.last,
-            role_id: answer.id,
-
-        }
-        db.promise().query("UPDATE employee SET role_id=? WHERE name=id ",).then(([response]) => {
+        var updateObj = 
+            [ answer.first,
+             answer.last,
+             answer.id]
+var updataData = "UPDATE employee SET role_id =? WHERE id = ?"
+        
+        db.promise().query(updataData,updateObj).then(([response]) => {
             if (response.affectedRows >= 1) {
                 viewEmployees()
             } else {
