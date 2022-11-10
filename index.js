@@ -224,19 +224,14 @@ async function updateEmployee() {
         name: "id",
         message: "Please select the employee's role",
         choices: updateArray
-    }, {
-        type: "list",
-        name: "manager_id",
-        message: "Please select the manager",
-        choices: employeesArray
+    }, 
 
-    }]).then(answer => {
+    ]).then(answer => {
         var updateObj = {
             first_name: answer.first,
             last_name: answer.last,
             role_id: answer.id,
-            id: answer.id
-
+           
         }
         db.promise().query("UPDATE employee SET ?", updateObj).then(([response]) => {
             if (response.affectedRows === 1) {
