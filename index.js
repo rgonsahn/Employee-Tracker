@@ -193,49 +193,74 @@ async function addEmployee() {
         })
     })
 }
-function updateEmployee() {
-    inquirer.prompt([{
-        name: 'employee_id',
-        type: 'input',
-        message: 'What is the employee ID of the new employee',
-        validate: updateEmployeeInput => {
-            if (updateEmployeeInput) {
-                return true;
-            } else {
-                console.log("Invalid Employee ID");
-                return false;
-            }
+async function updateEmployee() {
+    const [roles] = await db.promise().query("SELECT * FROM role")
+    const updateArray = roles.map(role => (
+        {
+            name: role.title,
+            value: role.id,
+
         }
-
-
+        
+    ))
+    const [employeesUpdate] = await db.promise().query("SELECT * FROM employee")
+    const employeesArray =employeesUpdate.map(employee => (
+        {
+            name: employee.first_name + " " + employee.last_name,
+            value: employee.id
+        }
+    ))
+    inquirer.prompt([{
+        type: "input",
+        name: "first",
+        message: "Please enter the name of the new employee."
     },
     {
-        name: 'role_id',
-        type: 'input',
-        message: 'Please update the role id of the new employee',
-        validate: (updateRoleIdInput) => {
-          if (updateRoleIdInput) {
-            return true;
-          } else {
-            console.log("Invalid please provide an updated role id!");
-            return false;
-          }
-    } 
-}
-    ])
-    .then((answers) => {
-        console.log(answers);
-        const database = "UPDATE employee SET role_id = ? WHERE employee_id = ?";
-        const parameters = [answers.role_id, answers.employee_id];
+        type: "input",
+        name: "last",
+        message: "Please enter the new employee's last name"
+    }, {
+        type: "list",
+        name: "id",
+        message: "Please select the employee's role",
+        choices: updateArray
+    }, {
+        type: "list",
+        name: "manager_id",
+        message: "Please select the manager",
+        choices: employeesArray
+
+    }]).then(answer => {
+        var updateObj = {
+            first_name: answer.first,
+            last_name: answer.last,
+            role_id: answer.id,
+            id: answer.id
+
+        }
+        db.promise().query("UPDATE employee SET ?", updateObj).then(([response]) => {
+            if (response.affectedRows === 1) {
+                viewEmployees()
+            } else {
+                console.info("err")
+            }
+
+        })
+    })
+
+//     .then((answers) => {
+//         console.log(answers);
+//         const database = "UPDATE employee SET role_id = ? WHERE id = ?";
+//         const parameters = [answers.role_id, answers.id];
   
-          db.query(database, parameters, function (err, results) {
-            if (err) throw err;
-            console.log(results);
-            mainMenu();
+//           db.query(database, parameters, function (err, results) {
+//             if (err) throw err;
+//             console.log(results);
+//             mainMenu();
 
-          });
+//           });
 
-});
+// });
 }
 
 mainMenu()
