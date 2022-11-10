@@ -35,7 +35,7 @@ function mainMenu() {
             addRole()
         } else if (direction === "add new employee") {
             addEmployee()
-        }else if(direction === "Update an Employee"){
+        } else if (direction === "Update an Employee") {
             updateEmployee()
         }
 
@@ -201,16 +201,23 @@ async function updateEmployee() {
             value: role.id,
 
         }
-        
+
     ))
     const [employeesUpdate] = await db.promise().query("SELECT * FROM employee")
-    const employeesArray =employeesUpdate.map(employee => (
+    const employeesArray = employeesUpdate.map(employee => (
         {
             name: employee.first_name + " " + employee.last_name,
             value: employee.id
         }
     ))
     inquirer.prompt([{
+        type: "input",
+        name: "role_id",
+        message: "What is the role ID which you would like to update?",
+    },
+
+
+    {
         type: "input",
         name: "first",
         message: "Please enter the name of the new employee."
@@ -224,17 +231,17 @@ async function updateEmployee() {
         name: "id",
         message: "Please select the employee's role",
         choices: updateArray
-    }, 
+    },
 
     ]).then(answer => {
         var updateObj = {
             first_name: answer.first,
             last_name: answer.last,
             role_id: answer.id,
-           
+
         }
-        db.promise().query("UPDATE employee SET ?", updateObj).then(([response]) => {
-            if (response.affectedRows === 1) {
+        db.promise().query("UPDATE employee SET role_id=? WHERE name=id ",).then(([response]) => {
+            if (response.affectedRows >= 1) {
                 viewEmployees()
             } else {
                 console.info("err")
@@ -243,19 +250,19 @@ async function updateEmployee() {
         })
     })
 
-//     .then((answers) => {
-//         console.log(answers);
-//         const database = "UPDATE employee SET role_id = ? WHERE id = ?";
-//         const parameters = [answers.role_id, answers.id];
-  
-//           db.query(database, parameters, function (err, results) {
-//             if (err) throw err;
-//             console.log(results);
-//             mainMenu();
+    //     .then((answers) => {
+    //         console.log(answers);
+    //         const database = "UPDATE employee SET role_id = ? WHERE id = ?";
+    //         const parameters = [answers.role_id, answers.id];
 
-//           });
+    //           db.query(database, parameters, function (err, results) {
+    //             if (err) throw err;
+    //             console.log(results);
+    //             mainMenu();
 
-// });
+    //           });
+
+    // });
 }
 
 mainMenu()
