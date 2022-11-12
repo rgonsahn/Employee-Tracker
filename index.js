@@ -223,13 +223,13 @@ async function updateEmployee() {
 
     {
         type: "input",
-        name: "first",
-        message: "Please enter the name of the new employee."
+        name: "id",
+        message: "Please enter the employee id of the employee"
     },
     {
         type: "input",
-        name: "last",
-        message: "Please enter the new employee's last name"
+        name: "title",
+        message: "Please enter the title of the employee"
     }, {
         type: "list",
         name: "id",
@@ -239,11 +239,11 @@ async function updateEmployee() {
 
     ]).then(answer => {
         var updateObj = 
-            [ answer.first,
-             answer.last,
-             answer.id]
-var updataData = "UPDATE employee SET first_name =? WHERE role_id = ?"
-        
+            [ answer.role_id,
+             answer.id,
+             answer.title]
+var updataData = "UPDATE employee SET role_id=? WHERE id = ?"
+        [role_id,employee_id]
         db.promise().query(updataData,updateObj).then(([response]) => {
             if (response.affectedRows >= 1) {
                 viewEmployees()
