@@ -203,13 +203,17 @@ async function updateEmployee() {
         }
 
     ))
+    console.log(updateArray)
     const [employeesUpdate] = await db.promise().query("SELECT * FROM employee")
     const employeesArray = employeesUpdate.map(employee => (
         {
             name: employee.first_name + " " + employee.last_name,
             value: employee.id
+            
         }
+       
     ))
+    console.log(employeesArray)
     inquirer.prompt([{
         type: "input",
         name: "role_id",
@@ -238,7 +242,7 @@ async function updateEmployee() {
             [ answer.first,
              answer.last,
              answer.id]
-var updataData = "UPDATE employee SET role_id =? WHERE id = ?"
+var updataData = "UPDATE employee SET first_name =? WHERE role_id = ?"
         
         db.promise().query(updataData,updateObj).then(([response]) => {
             if (response.affectedRows >= 1) {
