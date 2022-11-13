@@ -293,15 +293,23 @@ async function updateEmployeeManager() {
         })
 }
 function viewEmployeesByManager() {
-    db.promise().query(`CREATE VIEW harry_styles AS
-        SELECT employee.first_name, employee.last_name,employee.manager_id
+    db.promise().query(
+        `SELECT employee.first_name, employee.last_name,employee.manager_id
         FROM employee
-        WHERE employee.manager_id=1`).then(([response]) => {
+        WHERE employee.manager_id=2`).then(([response]) => {
         console.table(response)
         mainMenu()
     })
 }
 
-
+function viewEmployeesByDepartment() {
+    db.promise().query(
+        `SELECT employee.first_name, employee.last_name,employee.manager_id
+        FROM employee
+        WHERE employee.manager_id`).then(([response]) => {
+        console.table(response)
+        mainMenu()
+    })
+}
 
 mainMenu()
