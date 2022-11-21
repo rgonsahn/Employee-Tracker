@@ -39,10 +39,10 @@ function mainMenu() {
             addEmployee()
         } else if (direction === "Update an Employee's Role") {
             updateEmployeeRole()
-        } else if (direction === "Update an Employee's Manager"){
+        } else if (direction === "Update an Employee's Manager") {
             updateEmployeeManager()
-        } else if(direction=== "View an employee by manager"
-        ){
+        } else if (direction === "View an employee by manager"
+        ) {
             viewEmployeesByManager()
         }
 
@@ -259,9 +259,9 @@ async function updateEmployeeManager() {
             value: manager.manager_id
         }
     ))
-    const managersArray= [...beforeArray,{
-        name:"none",
-        value:null
+    const managersArray = [...beforeArray, {
+        name: "none",
+        value: null
     }]
     inquirer
         .prompt([
@@ -297,19 +297,19 @@ function viewEmployeesByManager() {
         `SELECT employee.first_name, employee.last_name,employee.manager_id
         FROM employee
         WHERE employee.manager_id=2`).then(([response]) => {
-        console.table(response)
-        mainMenu()
-    })
+            console.table(response)
+            mainMenu()
+        })
 }
 
 function viewEmployeesByDepartment() {
     db.promise().query(
-        `SELECT employee.first_name, employee.last_name,employee.manager_id
-        FROM employee
-        WHERE employee.manager_id`).then(([response]) => {
-        console.table(response)
-        mainMenu()
-    })
+        `SELECT , Customers.CustomerName, Orders.OrderDate
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID`).then(([response]) => {
+            console.table(response)
+            mainMenu()
+        })
 }
 
 mainMenu()
