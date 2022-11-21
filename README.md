@@ -10,6 +10,7 @@ The employee tracker application is a node JS built app that can be used to crea
 * Clone the github repository, 
 * npm install inqurer,
 * npm install mysql2 
+* cosole.table
 * npm start (to run application/ensure this is scripted in package.json)
 * mysql -u root -p from command line in terminal to view the database 
 
